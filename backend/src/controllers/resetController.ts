@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../middleware/asyncHandler";
 import { User } from "../models/User";
 import { generateResetToken } from "../utils/generateResetToken";
-import { mailer } from "../config/email";
+import { resend } from "../config/email";
 import { ENV } from "../config/env";
 import { resetPasswordTemplate } from "../utils/emailTemplates";
 
@@ -21,12 +21,13 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response) =
 
   const resetUrl = `${ENV.CLIENT_URL}/reset-password?token=${resetToken}`;
 
-  await mailer.sendMail({
-    to: user.email,
-    from: ENV.SMTP_USER,
-    subject: "Password Reset Request",
-    html: resetPasswordTemplate(resetUrl),
-  });
+  await resend.emails.send({
+  from: ENV.EMAIL_FROM!,
+  to: user.email,
+  subject: "Password Reset Request",
+  html: resetPasswordTemplate(resetUrl),
+});
+
 
   res.json({
     message: "Password reset email sent",
