@@ -1,0 +1,65 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime / PID files
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Build / output
+dist/
+build/
+client/build/
+server/build/
+public/build/
+.next/
+out/
+
+# Dependency caches
+.cache/
+.pnpm-store/
+.parcel-cache/
+
+# Environment files (keep examples)
+.env
+.env.*.local
+!.env.example
+
+# Coverage
+coverage/
+*.lcov
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs / editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Database / dumps
+dump/
+*.dump
+*.sqlite
+*.db
+
+# Docker
+docker-compose.override.yml
+
+# Certificates / keys
+*.pem
+*.key
+*.crt
+
+# Misc
+*.tgz
