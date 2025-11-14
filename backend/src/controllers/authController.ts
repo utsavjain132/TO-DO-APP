@@ -1,44 +1,38 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import { generateToken } from "../utils/generateToken";
+import { asyncHandler } from "../middleware/asyncHandler";
 
-export const signup = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
 
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ message: "Email already registered" });
-    }
+export const signup = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
 
-    const user = await User.create({ email, password });
+  const exists = await User.findOne({ email });
+  if (exists) throw new Error("Email already registered");
 
-    return res.status(201).json({
-      message: "Signup successful",
-      user: { id: user._id, email: user.email },
-    });
-  } catch (err) {
-    return res.status(500).json({ message: "Signup failed", error: err });
+  const user = await User.create({ email, password });
+
+  res.status(201).json({
+    message: "Signup successful",
+    user: { id: user._id, email: user.email },
+  });
+});
+
+
+export const login = asyncHandler(async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user || !(await user.comparePassword(password))) {
+    throw new Error("Invalid email or password");
   }
-};
 
-export const login = async (req: Request, res: Response) => {
-  try {
-    const { email, password } = req.body;
+  const token = generateToken(user._id.toString());
 
-    const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
+  res.json({
+    message: "Login successful",
+    token,
+    user: { id: user._id, email: user.email },
+  });
+});
 
-    const token = generateToken(user._id.toString());
-
-    return res.json({
-      message: "Login successful",
-      token,
-      user: { id: user._id, email: user.email },
-    });
-  } catch (err) {
-    return res.status(500).json({ message: "Login failed", error: err });
-  }
-};
