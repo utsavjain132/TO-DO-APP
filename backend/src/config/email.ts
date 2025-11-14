@@ -1,3 +1,5 @@
+console.log("🔥 USING RESEND MAILER (email.ts executed)");
+
 import { Resend } from "resend";
 import { ENV } from "./env";
 
