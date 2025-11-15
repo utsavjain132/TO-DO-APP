@@ -2,8 +2,5 @@
   "dependencies": {
     "mongoose": "^8.19.3",
     "resend": "^6.4.2"
-  },
-  "devDependencies": {
-
   }
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import "./ResetPassword.css";
 
 function ResetPassword() {
   const navigate = useNavigate();
@@ -35,26 +36,27 @@ function ResetPassword() {
 
   if (!token) {
     return (
-      <div style={{ width: "300px", margin: "100px auto" }}>
+      <div className="invalid-link-container">
         <h2>Invalid Link</h2>
         <p>The reset link is missing or broken.</p>
+        <p className="login-link">
         <Link to="/">Go to Login</Link>
+        </p>
       </div>
     );
   }
 
   return (
-    <div style={{ width: "300px", margin: "100px auto" }}>
+    <div className="reset-password-container">
       <h2>Reset Password</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="reset-password-form">
         <input
           type="password"
           placeholder="New Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
         <input
@@ -63,25 +65,12 @@ function ResetPassword() {
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "black",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Reset Password
-        </button>
+        <button type="submit">Reset Password</button>
       </form>
 
-      <p style={{ marginTop: "10px" }}>
+      <p className="login-link">
         <Link to="/">Back to Login</Link>
       </p>
     </div>

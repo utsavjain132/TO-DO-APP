@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import "./Signup.css";
 
 function Signup() {
   const navigate = useNavigate();
@@ -29,17 +30,16 @@ function Signup() {
   };
 
   return (
-    <div style={{ width: "300px", margin: "100px auto" }}>
+    <div className="signup-container">
       <h2>Create Account</h2>
 
-      <form onSubmit={handleSignup}>
+      <form onSubmit={handleSignup} className="signup-form">
         <input
           type="text"
           placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
         <input
@@ -48,7 +48,6 @@ function Signup() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
         <input
@@ -57,25 +56,12 @@ function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "black",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Sign Up
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
 
-      <p style={{ marginTop: "10px" }}>
+      <p className="login-link">
         Already have an account? <Link to="/">Login</Link>
       </p>
     </div>

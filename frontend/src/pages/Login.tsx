@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../store/auth";
+import "./Login.css";
 
 function Login() {
   const navigate = useNavigate();
@@ -29,17 +30,16 @@ function Login() {
   };
 
   return (
-    <div style={{ width: "300px", margin: "100px auto" }}>
+    <div className="login-container">
       <h2>Login</h2>
 
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleLogin} className="login-form">
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
         <input
@@ -48,30 +48,21 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
         />
 
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "black",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
+        <button type="submit">
           Login
         </button>
       </form>
 
-      <p style={{ marginTop: "10px" }}>
-        <Link to="/signup">Create an account</Link>
-      </p>
-      <p>
-        <Link to="/forgot-password">Forgot Password?</Link>
-      </p>
+      <div className="login-links">
+        <p>
+          <Link to="/signup">Create an account</Link>
+        </p>
+        <p>
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </p>
+      </div>
     </div>
   );
 }

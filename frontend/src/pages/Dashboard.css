@@ -1,0 +1,163 @@
+/* Consistent styling for the Dashboard */
+
+.dashboard-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.dashboard-header h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.logout-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
+
+/* Form styling to match other forms */
+.add-todo-form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-todo-form h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.add-todo-form input,
+.add-todo-form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.add-todo-form button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+}
+
+.add-todo-form button:hover {
+  background: #0056b3;
+}
+
+/* Todo item styling */
+.todo-item {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s;
+  border-left: 5px solid #007bff; /* Default a pending color */
+}
+
+.todo-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.todo-item.completed {
+  border-left-color: #28a745; /* Green for completed */
+}
+
+.todo-item.pending {
+  border-left-color: #ffc107; /* Orange for pending */
+}
+
+.todo-item h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.todo-item p {
+  margin: 0 0 1rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.toggle-btn,
+.delete-btn,
+.update-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: white;
+  transition: background-color 0.3s;
+}
+
+/* Specific button styles */
+.toggle-btn.completed {
+  background-color: #28a745;
+}
+.toggle-btn.completed:hover {
+  background-color: #218838;
+}
+
+.toggle-btn.pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+.toggle-btn.pending:hover {
+  background-color: #e0a800;
+}
+
+.delete-btn {
+  background-color: #d9534f;
+}
+.delete-btn:hover {
+  background-color: #c9302c;
+}
+
+.update-btn {
+  background-color: #17a2b8;
+}
+
+.update-btn:hover {
+  background-color: #138496;
+}
