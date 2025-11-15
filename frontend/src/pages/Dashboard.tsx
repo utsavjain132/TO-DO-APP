@@ -12,38 +12,38 @@ import {
   addTodo,
   deleteTodo,
   toggleTodo,
-  updateTodo, // import updateTodo
+  updateTodo,
 } from "../api/todos";
-import { UpdateTodoForm } from "../components/UpdateTodoForm"; // import the new component
+import { UpdateTodoForm } from "../components/UpdateTodoForm";
 import "./Dashboard.css";
-import { Todo } from "../schemas/todo";
+import type { Todo } from "../schemas/todo";
+
+// Form type that matches Zod + Update form
+type TodoForm = {
+  title: string;
+  description: string | null | undefined;
+};
 
 function Dashboard() {
   const navigate = useNavigate();
   const { token, logout } = useAuth();
   const queryClient = useQueryClient();
 
-  // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
-  // Redirect to login if no token
+  // Redirect if not authenticated
   useEffect(() => {
     if (!token) navigate("/");
   }, [token, navigate]);
 
-  // Fetch todos
+  // Fetch all todos
   const { data: todos, isLoading, isError } = useQuery({
     queryKey: ["todos"],
     queryFn: fetchTodos,
   });
 
-  // Add Todo
-  type TodoForm = {
-    title: string;
-    description: string;
-  };
-
+  // Add new todo form
   const { register, handleSubmit, reset } = useForm<TodoForm>();
 
   const addMutation = useMutation({
@@ -54,17 +54,18 @@ function Dashboard() {
     },
   });
 
-  // Update Todo
   const updateMutation = useMutation({
     mutationFn: (variables: { id: string; data: TodoForm }) =>
-      updateTodo(variables.id, variables.data),
+      updateTodo(variables.id, {
+        title: variables.data.title,
+        description: variables.data.description || "", // normalize description
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
-      setIsModalOpen(false); // Close modal on success
+      setIsModalOpen(false);
     },
   });
 
-  // Toggle todo
   const toggleMutation = useMutation({
     mutationFn: toggleTodo,
     onSuccess: () => {
@@ -72,7 +73,6 @@ function Dashboard() {
     },
   });
 
-  // Delete todo
   const deleteMutation = useMutation({
     mutationFn: deleteTodo,
     onSuccess: () => {
@@ -83,7 +83,6 @@ function Dashboard() {
   if (isLoading) return <p>Loading todos...</p>;
   if (isError) return <p>Failed to load todos.</p>;
 
-  // Function to open modal
   const openModal = (todo: Todo) => {
     setSelectedTodo(todo);
     setIsModalOpen(true);
@@ -99,23 +98,31 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* ADD TODO CARD */}
+      {/* ADD TODO */}
       <form
-        onSubmit={handleSubmit((data) => addMutation.mutate(data))}
+        onSubmit={handleSubmit((data) =>
+          addMutation.mutate({
+            title: data.title,
+            description: data.description || "", // normalize description
+          })
+        )}
         className="add-todo-form"
       >
         <h3>Add New Todo</h3>
+
         <input
           type="text"
           placeholder="Title"
           {...register("title")}
           required
         />
+
         <textarea
           placeholder="Description"
           {...register("description")}
           rows={3}
         ></textarea>
+
         <button type="submit">Add Todo</button>
       </form>
 
@@ -123,27 +130,32 @@ function Dashboard() {
       {todos!.map((todo) => (
         <div
           key={todo._id}
-          className={`todo-item ${todo.completed ? "completed" : "pending"}`}>
+          className={`todo-item ${todo.completed ? "completed" : "pending"}`}
+        >
           <h3>{todo.title}</h3>
           <p>{todo.description}</p>
 
           <div className="todo-actions">
-            {/* Update button */}
+            {/* Update */}
             <button onClick={() => openModal(todo)} className="update-btn">
               Update
             </button>
 
-            {/* Toggle button */}
+            {/* Toggle */}
             <button
               onClick={() => toggleMutation.mutate(todo._id)}
-              className={`toggle-btn ${todo.completed ? "completed" : "pending"}`}>
+              className={`toggle-btn ${
+                todo.completed ? "completed" : "pending"
+              }`}
+            >
               {todo.completed ? "Completed" : "Mark Completed"}
             </button>
 
-            {/* Delete button */}
+            {/* Delete */}
             <button
               onClick={() => deleteMutation.mutate(todo._id)}
-              className="delete-btn">
+              className="delete-btn"
+            >
               Delete
             </button>
           </div>
@@ -154,7 +166,12 @@ function Dashboard() {
       {isModalOpen && selectedTodo && (
         <UpdateTodoForm
           todo={selectedTodo}
-          onSubmit={(data) => updateMutation.mutate({ id: selectedTodo._id, data })}
+          onSubmit={(data) =>
+            updateMutation.mutate({
+              id: selectedTodo._id,
+              data,
+            })
+          }
           onClose={() => setIsModalOpen(false)}
         />
       )}

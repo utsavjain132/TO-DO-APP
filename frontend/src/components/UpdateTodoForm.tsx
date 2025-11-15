@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
-import { Todo } from "../schemas/todo";
+import type { Todo } from "../schemas/todo";
 import "./UpdateTodoForm.css";
 
 type UpdateTodoFormProps = {
   todo: Todo;
-  onSubmit: (data: { title: string; description: string }) => void;
+  onSubmit: (data: { title: string; description: string | null | undefined }) => void;
   onClose: () => void;
 };
 
@@ -19,7 +19,14 @@ export const UpdateTodoForm = ({ todo, onSubmit, onClose }: UpdateTodoFormProps)
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit((data) =>
+            onSubmit({
+              title: data.title,
+              description: data.description || "",  // normalizes empty to ""
+            })
+          )}
+        >
           <h2>Update Todo</h2>
 
           <input
