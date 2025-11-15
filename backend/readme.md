@@ -1,1 +1,0 @@
-To-do web app with backend in node.js [ typescript] and frontend in react.js [ typescript]. This app also has login/signup functionality with password reset option which uses Resend to send password reset links
