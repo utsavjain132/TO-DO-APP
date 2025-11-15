@@ -1,9 +1,1 @@
-RyrKVNU8Xd3Mju0J
-
-mongodb+srv://admin:<RyrKVNU8Xd3Mju0J>@cluster0.idg32o3.mongodb.net/?appName=Cluster0
-
-npm install mongodb
-
-app password = sheq xtgi wqkx kwby
-
-resend api = re_4uqzem8f_5sse45HBsLRBLUWHz7fErcdM
+To-do web app with backend in node.js [ typescript] and frontend in react.js [ typescript]. This app also has login/signup functionality with password reset option which uses Resend to send password reset links
