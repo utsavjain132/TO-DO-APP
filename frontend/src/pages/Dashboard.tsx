@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../store/auth";
 import { useForm } from "react-hook-form";
@@ -12,13 +12,20 @@ import {
   addTodo,
   deleteTodo,
   toggleTodo,
+  updateTodo, // import updateTodo
 } from "../api/todos";
+import { UpdateTodoForm } from "../components/UpdateTodoForm"; // import the new component
 import "./Dashboard.css";
+import { Todo } from "../schemas/todo";
 
 function Dashboard() {
   const navigate = useNavigate();
   const { token, logout } = useAuth();
   const queryClient = useQueryClient();
+
+  // State for modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
 
   // Redirect to login if no token
   useEffect(() => {
@@ -31,20 +38,29 @@ function Dashboard() {
     queryFn: fetchTodos,
   });
 
-  // Add Todo 
+  // Add Todo
   type TodoForm = {
-  title: string;
-  description: string;
-};
+    title: string;
+    description: string;
+  };
 
-const { register, handleSubmit, reset } = useForm<TodoForm>();
-
+  const { register, handleSubmit, reset } = useForm<TodoForm>();
 
   const addMutation = useMutation({
     mutationFn: addTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       reset();
+    },
+  });
+
+  // Update Todo
+  const updateMutation = useMutation({
+    mutationFn: (variables: { id: string; data: TodoForm }) =>
+      updateTodo(variables.id, variables.data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      setIsModalOpen(false); // Close modal on success
     },
   });
 
@@ -66,6 +82,12 @@ const { register, handleSubmit, reset } = useForm<TodoForm>();
 
   if (isLoading) return <p>Loading todos...</p>;
   if (isError) return <p>Failed to load todos.</p>;
+
+  // Function to open modal
+  const openModal = (todo: Todo) => {
+    setSelectedTodo(todo);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="dashboard-container">
@@ -106,14 +128,19 @@ const { register, handleSubmit, reset } = useForm<TodoForm>();
           <p>{todo.description}</p>
 
           <div className="todo-actions">
-            {/* Toggle */}
+            {/* Update button */}
+            <button onClick={() => openModal(todo)} className="update-btn">
+              Update
+            </button>
+
+            {/* Toggle button */}
             <button
               onClick={() => toggleMutation.mutate(todo._id)}
               className={`toggle-btn ${todo.completed ? "completed" : "pending"}`}>
               {todo.completed ? "Completed" : "Mark Completed"}
             </button>
 
-            {/* Delete */}
+            {/* Delete button */}
             <button
               onClick={() => deleteMutation.mutate(todo._id)}
               className="delete-btn">
@@ -122,6 +149,15 @@ const { register, handleSubmit, reset } = useForm<TodoForm>();
           </div>
         </div>
       ))}
+
+      {/* UPDATE MODAL */}
+      {isModalOpen && selectedTodo && (
+        <UpdateTodoForm
+          todo={selectedTodo}
+          onSubmit={(data) => updateMutation.mutate({ id: selectedTodo._id, data })}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
