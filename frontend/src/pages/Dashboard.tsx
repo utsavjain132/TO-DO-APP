@@ -13,6 +13,7 @@ import {
   deleteTodo,
   toggleTodo,
 } from "../api/todos";
+import "./Dashboard.css";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -67,27 +68,11 @@ const { register, handleSubmit, reset } = useForm<TodoForm>();
   if (isError) return <p>Failed to load todos.</p>;
 
   return (
-    <div style={{ maxWidth: "800px", margin: "30px auto", padding: "10px" }}>
+    <div className="dashboard-container">
       {/* HEADER */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="dashboard-header">
         <h2>Your Todos</h2>
-        <button
-          onClick={logout}
-          style={{
-            padding: "8px 12px",
-            border: "none",
-            background: "black",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
+        <button onClick={logout} className="logout-btn">
           Logout
         </button>
       </div>
@@ -95,105 +80,43 @@ const { register, handleSubmit, reset } = useForm<TodoForm>();
       {/* ADD TODO CARD */}
       <form
         onSubmit={handleSubmit((data) => addMutation.mutate(data))}
-        style={{
-          background: "white",
-          padding: "15px",
-          borderRadius: "8px",
-          marginBottom: "20px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
+        className="add-todo-form"
       >
         <h3>Add New Todo</h3>
-
         <input
           type="text"
           placeholder="Title"
           {...register("title")}
           required
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "10px",
-            borderRadius: "5px",
-            border: "1px solid #ddd",
-          }}
         />
-
         <textarea
           placeholder="Description"
           {...register("description")}
           rows={3}
-          style={{
-            width: "100%",
-            padding: "10px",
-            marginBottom: "10px",
-            borderRadius: "5px",
-            border: "1px solid #ddd",
-          }}
         ></textarea>
-
-        <button
-          type="submit"
-          style={{
-            padding: "10px",
-            background: "black",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-            width: "100%",
-            borderRadius: "5px",
-          }}
-        >
-          Add Todo
-        </button>
+        <button type="submit">Add Todo</button>
       </form>
 
       {/* TODO LIST */}
       {todos!.map((todo) => (
         <div
           key={todo._id}
-          style={{
-            background: "white",
-            padding: "15px",
-            borderRadius: "8px",
-            marginBottom: "15px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            borderLeft: todo.completed ? "6px solid green" : "6px solid orange",
-          }}
-        >
-          <h3 style={{ margin: "0 0 5px" }}>{todo.title}</h3>
-          <p style={{ margin: "0 0 10px", color: "#555" }}>
-            {todo.description}
-          </p>
+          className={`todo-item ${todo.completed ? "completed" : "pending"}`}>
+          <h3>{todo.title}</h3>
+          <p>{todo.description}</p>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className="todo-actions">
             {/* Toggle */}
             <button
               onClick={() => toggleMutation.mutate(todo._id)}
-              style={{
-                padding: "6px 10px",
-                border: "none",
-                cursor: "pointer",
-                background: todo.completed ? "green" : "orange",
-                color: "white",
-                borderRadius: "5px",
-              }}
-            >
+              className={`toggle-btn ${todo.completed ? "completed" : "pending"}`}>
               {todo.completed ? "Completed" : "Mark Completed"}
             </button>
 
             {/* Delete */}
             <button
               onClick={() => deleteMutation.mutate(todo._id)}
-              style={{
-                padding: "6px 10px",
-                border: "none",
-                cursor: "pointer",
-                background: "red",
-                color: "white",
-                borderRadius: "5px",
-              }}
-            >
+              className="delete-btn">
               Delete
             </button>
           </div>
