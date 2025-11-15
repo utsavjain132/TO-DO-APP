@@ -3,9 +3,10 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../store/auth";
 
-
 function Login() {
   const navigate = useNavigate();
+  const { setToken } = useAuth();  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,14 +16,15 @@ function Login() {
     try {
       const res = await axios.post("http://localhost:5000/api/auth/login", {
         email,
-        password
+        password,
       });
 
-      useAuth().setToken(res.data.token);
+      setToken(res.data.token);  
       navigate("/dashboard");
 
-    } catch (err) {
-      alert("Login failed");
+    } catch (err: any) {
+      console.log("LOGIN ERROR:", err.response?.data || err.message);
+      alert("Login failed: " + (err.response?.data?.message || "Unknown error"));
     }
   };
 
@@ -57,7 +59,7 @@ function Login() {
             background: "black",
             color: "white",
             border: "none",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
         >
           Login
