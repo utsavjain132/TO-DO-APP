@@ -1,6 +1,15 @@
 {
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "start": "concurrently \"yarn --cwd backend start\" \"yarn --cwd frontend start\"",
+    "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend dev\"",
+    "install-all": "yarn install"
+  },
   "dependencies": {
-    "mongoose": "^8.19.3",
-    "resend": "^6.4.2"
+    "concurrently": "^8.2.2"
   }
 }
